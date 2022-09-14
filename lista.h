@@ -20,5 +20,7 @@ typedef struct {
 
 void CriaMatriz(Matriz *m);
 
+void ImprimeMatrizEsparsa(Matriz *m);
+
 
 #endif // lista_h

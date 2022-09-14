@@ -12,6 +12,7 @@ void CriaMatriz(Matriz *m){
     
     // valores de linhas e colunas
     int row, col;
+    printf("\nDigite o numero de linhas e colunas da matriz: ");
     scanf("%d %d", &row, &col);
 
     // cria as celulas da coluna
@@ -32,9 +33,13 @@ void CriaMatriz(Matriz *m){
     }
     
     // ler um valor de linha coluna e valor e adicionar na matriz na posição correta
-    int linha, coluna, valor;
-    scanf("%d %d %d", &linha, &coluna, &valor);
-    while (linha != 0 && coluna != 0 && valor != 0) {
+    int linha, coluna, valor, nElements;
+    printf("\nDigite o numero de elementos da matriz: ");
+    scanf("%d", &nElements);
+    do {
+        printf("\nDigite os elementos da matriz: ");
+        scanf("%d %d %d", &linha, &coluna, &valor);
+        printf("Entrou no while");
         // cria uma celula
         Celula *nova = (Celula *)malloc(sizeof(Celula));
         nova->item.numero = valor;
@@ -62,6 +67,20 @@ void CriaMatriz(Matriz *m){
         }
         nova->baixo = aux->baixo;
         aux->baixo = nova;
-    }
+        printf("\nDigite os elementos da matriz: ");
+        scanf("%d %d %d", &linha, &coluna, &valor);
+        nElements--;
+    } while (nElements > 0);
 }
 
+void ImprimeMatrizEsparsa(Matriz *m){
+    Celula *aux = m->cabeca->baixo;
+    while (aux->row_pos != -1) {
+        Celula *aux2 = aux->prox;
+        while (aux2->col_pos != -1) {
+            printf("%d %d %d", aux2->row_pos, aux2->col_pos, aux2->item.numero);
+            aux2 = aux2->prox;
+        }
+        aux = aux->baixo;
+    }
+}
