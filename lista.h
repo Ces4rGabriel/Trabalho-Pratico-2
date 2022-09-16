@@ -22,5 +22,7 @@ void CriaMatriz(Matriz *m);
 
 void ImprimeMatrizEsparsa(Matriz *m);
 
+void LiberaMemoria(Matriz *m);
+
 
 #endif // lista_h

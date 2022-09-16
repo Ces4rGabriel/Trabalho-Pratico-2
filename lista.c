@@ -20,6 +20,7 @@ void CriaMatriz(Matriz *m){
         m->cauda->prox = (Celula *)malloc(sizeof(Celula));
         m->cauda = m->cauda->prox;
         m->cauda->prox = m->cabeca;
+        m->cauda->baixo = m->cauda;
         m->cauda->col_pos = -1;
     }
     
@@ -29,6 +30,7 @@ void CriaMatriz(Matriz *m){
         m->cauda->baixo = (Celula *)malloc(sizeof(Celula));
         m->cauda = m->cauda->baixo;
         m->cauda->baixo = m->cabeca;
+        m->cauda->prox = m->cauda;
         m->cauda->row_pos = -1;
     }
     
@@ -36,51 +38,86 @@ void CriaMatriz(Matriz *m){
     int linha, coluna, valor, nElements;
     printf("\nDigite o numero de elementos da matriz: ");
     scanf("%d", &nElements);
-    do {
-        printf("\nDigite os elementos da matriz: ");
-        scanf("%d %d %d", &linha, &coluna, &valor);
-        printf("Entrou no while");
+    do {// ler os valores e criar as celulas
+        printf("\nDigite a linha: ");
+        scanf("%d", &linha);
+        printf("\nDigite a coluna: ");
+        scanf("%d", &coluna);
+        printf("\nDigite a valor: ");
+        scanf("%d", &valor);
         // cria uma celula
         Celula *nova = (Celula *)malloc(sizeof(Celula));
         nova->item.numero = valor;
         nova->row_pos = linha;
         nova->col_pos = coluna;
         
+        // INSERIR CELULA
         // percorre a linha
-        Celula *aux = m->cabeca->baixo;
-        while (aux->row_pos != linha) {
+        Celula *aux = m->cabeca;
+        Celula *aux2;
+        for (int i= 0; i < linha; i++) {
             aux = aux->baixo;
         }
-        while (aux->prox->col_pos < coluna) {
+        // achar a posiçao da coluna
+        aux2 = aux;
+        while (aux != aux2->prox) {
             aux = aux->prox;
         }
-        nova->prox = aux->prox;
-        aux->prox = nova;
-        
+        aux2->prox = nova;
+        nova->prox = aux;
+
         // percorre a coluna
-        aux = m->cabeca->prox;
-        while (aux->col_pos != coluna) {
+        aux = m->cabeca;
+        for (int i= 0; i < coluna; i++) {
             aux = aux->prox;
         }
-        while (aux->baixo->row_pos < linha) {
+        // achar a posiçao da linha
+        aux2 = aux;
+        while (aux != aux2->baixo) {
             aux = aux->baixo;
         }
-        nova->baixo = aux->baixo;
-        aux->baixo = nova;
-        printf("\nDigite os elementos da matriz: ");
-        scanf("%d %d %d", &linha, &coluna, &valor);
+        aux2->baixo = nova;
+        nova->baixo = aux;
+        // FIM INSERIR CELULA
+
+        //printf("\nrow_pos: %d - col_pos: %d - valor: %d\n", nova->row_pos, nova->col_pos, nova->item.numero);
         nElements--;
     } while (nElements > 0);
 }
 
 void ImprimeMatrizEsparsa(Matriz *m){
+    int i= 0, j = 1;
     Celula *aux = m->cabeca->baixo;
-    while (aux->row_pos != -1) {
-        Celula *aux2 = aux->prox;
+    Celula *aux2 = aux->prox;
+    while (aux != m->cabeca) {
         while (aux2->col_pos != -1) {
-            printf("%d %d %d", aux2->row_pos, aux2->col_pos, aux2->item.numero);
+            if (aux2->row_pos == i && aux2->col_pos == j) {
+                printf("%d ", aux2->item.numero);
+                aux2 = aux2->prox;
+            } else {
+                printf("0 ");
+            }
+            j++;
+        }
+        printf("\n");
+        i++;
+        j = 1;
+        aux = aux->baixo;
+    }
+    
+
+}
+
+void LiberaMemoria(Matriz *m){
+    Celula *aux = m->cabeca->baixo;
+    Celula *aux2;
+    while (aux->row_pos != -1) {
+        aux2 = aux->prox;
+        while (aux2->col_pos != -1) {
+            free(aux2);
             aux2 = aux2->prox;
         }
         aux = aux->baixo;
     }
+    free(m->cabeca);
 }
