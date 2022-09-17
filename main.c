@@ -4,9 +4,10 @@
 
 
 int main(){
+    int row, col;
     Matriz m;
-    CriaMatriz(&m);
-    ImprimeMatrizEsparsa(&m);
+    CriaMatriz(&m, &row, &col);
+    ImprimeMatrizEsparsa(&m, row, col);
     LiberaMemoria(&m);
     return 0;
 }
