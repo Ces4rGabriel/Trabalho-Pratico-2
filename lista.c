@@ -12,7 +12,7 @@ void CriaMatriz(Matriz *m, int *row, int *col){
     m->cabeca->baixo = m->cabeca;
     
     // valores de linhas e colunas
-    printf("\nDigite o numero de linhas e colunas da matriz: ");
+    //printf("\nDigite o numero de linhas e colunas da matriz: ");
     scanf("%d %d", row, col);
 
     // cria as celulas da coluna
@@ -36,15 +36,12 @@ void CriaMatriz(Matriz *m, int *row, int *col){
     
     // ler um valor de linha coluna e valor e adicionar na matriz na posição correta
     int linha, coluna, valor, nElements;
-    printf("\nDigite o numero de elementos da matriz: ");
+    //printf("\nDigite o numero de elementos da matriz: ");
     scanf("%d", &nElements);
     do {// ler os valores e criar as celulas
-        printf("\nDigite a linha: ");
-        scanf("%d", &linha);
-        printf("\nDigite a coluna: ");
-        scanf("%d", &coluna);
-        printf("\nDigite a valor: ");
-        scanf("%d", &valor);
+        //printf("\nDigite a linha coluna e valor: ");
+        scanf("%d %d %d", &linha, &coluna, &valor);
+
         // cria uma celula
         Celula *nova = (Celula *)malloc(sizeof(Celula));
         nova->item.numero = valor;
@@ -61,7 +58,7 @@ void CriaMatriz(Matriz *m, int *row, int *col){
         // achar a posiçao da coluna
         aux2 = aux;
         while (aux != aux2->prox) {
-            aux = aux->prox;
+            aux2 = aux->prox;
         }
         aux2->prox = nova;
         nova->prox = aux;
