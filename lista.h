@@ -30,5 +30,7 @@ void InsereCelula(Matriz*, int, int, int);
 
 void LeValores(Matriz *m);
 
+Matriz *SomaMatriz(Matriz*, Matriz *, int, int);
+
 
 #endif // lista_h

@@ -135,3 +135,12 @@ void MatrizTransposta(Matriz *m, int row, int col){
     ImprimeMatrizEsparsa(&t, col, row);
     LiberaMemoria(&t);
 }
+
+Matriz *SomaMatriz(Matriz *a, Matriz *b, int row, int col){
+    int i, j, soma;
+    Celula *cA, *cB;
+    Matriz c;
+    CriaMatriz(&c, row, col);
+    cA = a->cabeca->baixo;
+    cB = b->cabeca->baixo;
+}
