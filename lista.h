@@ -18,11 +18,17 @@ typedef struct {
     Celula *cauda;
 } Matriz;
 
-void CriaMatriz(Matriz *m, int*, int*);
+void CriaMatriz(Matriz*, int*, int*);
 
-void ImprimeMatrizEsparsa(Matriz *m, int, int);
+void ImprimeMatrizEsparsa(Matriz*, int, int);
 
-void LiberaMemoria(Matriz *m);
+void LiberaMemoria(Matriz*);
+
+void MatrizTransposta(Matriz*, int, int);
+
+void InsereCelula(Matriz*, int, int, int);
+
+void LeValores(Matriz *m);
 
 
 #endif // lista_h

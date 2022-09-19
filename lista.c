@@ -13,8 +13,7 @@ void CriaMatriz(Matriz *m, int *row, int *col){
     
     // valores de linhas e colunas
     //printf("\nDigite o numero de linhas e colunas da matriz: ");
-    scanf("%d %d", row, col);
-
+    
     // cria as celulas da coluna
     for (int i = 0; i < *col; i++) {
         m->cauda->prox = (Celula *)calloc(1, sizeof(Celula));
@@ -33,7 +32,9 @@ void CriaMatriz(Matriz *m, int *row, int *col){
         m->cauda->prox = m->cauda;
         m->cauda->row_pos = -1;
     }
-    
+}
+
+void LeValores(Matriz *m){ 
     // ler um valor de linha coluna e valor e adicionar na matriz na posição correta
     int linha, coluna, valor, nElements;
     //printf("\nDigite o numero de elementos da matriz: ");
@@ -41,18 +42,22 @@ void CriaMatriz(Matriz *m, int *row, int *col){
     do {// ler os valores e criar as celulas
         //printf("\nDigite a linha coluna e valor: ");
         scanf("%d %d %d", &linha, &coluna, &valor);
-
+        InsereCelula(m, linha, coluna, valor);
+        nElements--;
+    } while (nElements > 0);
+}
+void InsereCelula(Matriz* m, int row, int col, int valor){
         // cria uma celula
         Celula *nova = (Celula *)malloc(sizeof(Celula));
         nova->item.numero = valor;
-        nova->row_pos = linha;
-        nova->col_pos = coluna;
+        nova->row_pos = row;
+        nova->col_pos = col;
         
         // INSERIR CELULA
         // percorre a linha
         Celula *aux = m->cabeca;
         Celula *aux2;
-        for (int i = 0; i < linha; i++) {
+        for (int i = 0; i < row; i++) {
             aux = aux->baixo;
         }
         // achar a posiçao da coluna
@@ -64,7 +69,7 @@ void CriaMatriz(Matriz *m, int *row, int *col){
         nova->prox = aux;
         // percorre a coluna
         aux = m->cabeca;
-        for (int i= 0; i < coluna; i++) {
+        for (int i = 0; i < col; i++) {
             aux = aux->prox;
         }
         // achar a posiçao da linha
@@ -75,14 +80,24 @@ void CriaMatriz(Matriz *m, int *row, int *col){
         aux2->baixo = nova;
         nova->baixo = aux;
         // FIM INSERIR CELULA
+}
 
-        //printf("\nrow_pos: %d - col_pos: %d - valor: %d\n", nova->row_pos, nova->col_pos, nova->item.numero);
-        nElements--;
-    } while (nElements > 0);
+void LiberaMemoria(Matriz *m){
+    Celula *aux = m->cabeca->baixo;
+    Celula *aux2;
+    while (aux->row_pos != -1) {
+        aux2 = aux->prox;
+        while (aux2->col_pos != -1) {
+            free(aux2);
+            aux2 = aux2->prox;
+        }
+        aux = aux->baixo;
+    }
+    free(m->cabeca);
 }
 
 void ImprimeMatrizEsparsa(Matriz *m, int row, int col){
-    int i= 1, j = 1;
+    int i, j;
     Celula *aux = m->cabeca->baixo;
     Celula *aux2 = aux->prox;
     for(i = 1; i <= row; i++){
@@ -100,16 +115,26 @@ void ImprimeMatrizEsparsa(Matriz *m, int row, int col){
     }
 }
 
-void LiberaMemoria(Matriz *m){
-    Celula *aux = m->cabeca->baixo;
-    Celula *aux2;
-    while (aux->row_pos != -1) {
-        aux2 = aux->prox;
-        while (aux2->col_pos != -1) {
-            free(aux2);
-            aux2 = aux2->prox;
+void MatrizTransposta(Matriz *m, int row, int col){
+    int i, j;
+    Matriz t;
+    CriaMatriz(&t, &col, &row);
+    // passar valores da matriz m para matriz tranposta
+    Celula *aux = m->cabeca->prox;
+    Celula *aux2 = aux->baixo;
+    for(i = 1; i <= col; i++){
+        for(j = 1; j <= row; j++){
+            if(aux2->row_pos == j && aux2->col_pos == i){
+                InsereCelula(&t, i, j, aux2->item.numero);
+                aux2 = aux2->baixo;
+            }
         }
-        aux = aux->baixo;
+        aux = aux->prox;
+        aux2 = aux->baixo;
     }
-    free(m->cabeca);
+        
+
+
+    ImprimeMatrizEsparsa(&t, col, row);
+    LiberaMemoria(&t);
 }
