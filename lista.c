@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 
-void CriaMatriz(Matriz *m, int *row, int *col){
+void CriaMatriz(Matriz *m, int row, int col){
     //Cria uma cabeça e faz a cauda apontar para ela
     m->cabeca = (Celula *)malloc(sizeof(Celula));
     m->cauda = m->cabeca;
@@ -15,7 +15,7 @@ void CriaMatriz(Matriz *m, int *row, int *col){
     //printf("\nDigite o numero de linhas e colunas da matriz: ");
     
     // cria as celulas da coluna
-    for (int i = 0; i < *col; i++) {
+    for (int i = 0; i < col; i++) {
         m->cauda->prox = (Celula *)calloc(1, sizeof(Celula));
         m->cauda = m->cauda->prox;
         m->cauda->prox = m->cabeca;
@@ -25,7 +25,7 @@ void CriaMatriz(Matriz *m, int *row, int *col){
     
     // cria as celulas da linha
     m->cauda = m->cabeca;
-    for (int i = 0; i < *row; i++) {
+    for (int i = 0; i < row; i++) {
         m->cauda->baixo = (Celula *)calloc(1, sizeof(Celula));
         m->cauda = m->cauda->baixo;
         m->cauda->baixo = m->cabeca;
@@ -63,19 +63,19 @@ void InsereCelula(Matriz* m, int row, int col, int valor){
         // achar a posiçao da coluna
         aux2 = aux;
         while (aux != aux2->prox) {
-            aux2 = aux->prox;
+            aux2 = aux2->prox;
         }
         aux2->prox = nova;
         nova->prox = aux;
         // percorre a coluna
         aux = m->cabeca;
-        for (int i = 0; i < col; i++) {
+        for (int i= 0; i < col; i++) {
             aux = aux->prox;
         }
         // achar a posiçao da linha
         aux2 = aux;
         while (aux != aux2->baixo) {
-            aux = aux->baixo;
+            aux2 = aux2->baixo;
         }
         aux2->baixo = nova;
         nova->baixo = aux;
@@ -118,7 +118,7 @@ void ImprimeMatrizEsparsa(Matriz *m, int row, int col){
 void MatrizTransposta(Matriz *m, int row, int col){
     int i, j;
     Matriz t;
-    CriaMatriz(&t, &col, &row);
+    CriaMatriz(&t, col, row);
     // passar valores da matriz m para matriz tranposta
     Celula *aux = m->cabeca->prox;
     Celula *aux2 = aux->baixo;
@@ -132,9 +132,6 @@ void MatrizTransposta(Matriz *m, int row, int col){
         aux = aux->prox;
         aux2 = aux->baixo;
     }
-        
-
-
     ImprimeMatrizEsparsa(&t, col, row);
     LiberaMemoria(&t);
 }

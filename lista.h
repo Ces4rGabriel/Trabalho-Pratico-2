@@ -18,7 +18,7 @@ typedef struct {
     Celula *cauda;
 } Matriz;
 
-void CriaMatriz(Matriz*, int*, int*);
+void CriaMatriz(Matriz*, int, int);
 
 void ImprimeMatrizEsparsa(Matriz*, int, int);
 
