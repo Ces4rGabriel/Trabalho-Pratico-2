@@ -148,6 +148,7 @@ void MatrizTransposta(Matriz *m, int row, int col){
         aux = aux->prox;
         aux2 = aux->baixo;
     }
+    printf("\n");
     ImprimeMatrizEsparsa(&t, col, row);
     LiberaMemoria(&t, row, col);
 }
