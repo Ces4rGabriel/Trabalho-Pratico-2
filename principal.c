@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "lista.h"
+#include "matriz.h"
 
 
 int main(){
@@ -19,7 +19,7 @@ int main(){
         break;
     case 'S':
         // soma n matrizes
-        CriaMatriz(&b, row, col);
+        CriaMatriz(&b, row, col); // tem um problema aqui, preciso saber o valor de row col antes de criar a matriz b q vai receber o valor da soma
         while (n > 0){
             scanf("%d %d", &row, &col); // ler a linha e a coluna
             CriaMatriz(&a, row, col);
@@ -27,7 +27,6 @@ int main(){
             b = SomaMatriz(&a, &b, row, col);
             n--;
         }
-        printf("Soma:\n\n");
         ImprimeMatrizEsparsa(&b, row, col);
         LiberaMemoria(&a, row, col);
         LiberaMemoria(&b, row, col);

@@ -1,4 +1,4 @@
-#include "lista.h"
+#include "matriz.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -148,7 +148,6 @@ void MatrizTransposta(Matriz *m, int row, int col){
         aux = aux->prox;
         aux2 = aux->baixo;
     }
-    printf("\n");
     ImprimeMatrizEsparsa(&t, col, row);
     LiberaMemoria(&t, row, col);
 }

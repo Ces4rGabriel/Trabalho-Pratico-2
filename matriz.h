@@ -1,5 +1,5 @@
-#ifndef lista_h
-#define lista_h
+#ifndef matriz_h
+#define matriz_h
 
 typedef struct{
     int numero;

@@ -1,8 +1,8 @@
-all: main.o lista.o
-	@gcc main.o lista.o -o exe
-lista.o: lista.c
-	@gcc lista.c -c -lm -Wall
+all: principal.o matriz.o
+	@gcc principal.o matriz.o -o exe
+lista.o: matriz.c
+	@gcc matriz.c -c -lm -Wall
 pratica.o: pratica.c
-	@gcc main.c -c -lm -Wall
+	@gcc principal.c -c -lm -Wall
 run:
 	@./exe
