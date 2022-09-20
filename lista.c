@@ -82,16 +82,32 @@ void InsereCelula(Matriz* m, int row, int col, int valor){
         // FIM INSERIR CELULA
 }
 
-void LiberaMemoria(Matriz *m){
+void LiberaMemoria(Matriz *m, int row, int col){
+    int i, j;
     Celula *aux = m->cabeca->baixo;
-    Celula *aux2;
-    while (aux->row_pos != -1) {
-        aux2 = aux->prox;
-        while (aux2->col_pos != -1) {
-            free(aux2);
-            aux2 = aux2->prox;
+    Celula *aux2 = aux->prox;
+    //percorrer a matriz esparsa e liberar a memoria
+    for(i = 1; i <= row; i++){
+        for(j = 1; j <= col; j++){
+            if(aux->prox->row_pos == i && aux->prox->col_pos == j){
+                aux2 = aux->prox;
+                aux->prox = aux->prox->prox;
+                free(aux2);
+            }
         }
         aux = aux->baixo;
+    }
+    aux = m->cabeca->prox;
+    for(i = 1; i <= col; i++){
+        aux2 = aux;
+        aux = aux->prox;
+        free(aux2);
+    }
+    aux = m->cabeca->baixo;
+    for(i = 1; i <= row; i++){
+        aux2 = aux;
+        aux = aux->baixo;
+        free(aux2);
     }
     free(m->cabeca);
 }
@@ -133,14 +149,36 @@ void MatrizTransposta(Matriz *m, int row, int col){
         aux2 = aux->baixo;
     }
     ImprimeMatrizEsparsa(&t, col, row);
-    LiberaMemoria(&t);
+    LiberaMemoria(&t, row, col);
 }
 
-Matriz *SomaMatriz(Matriz *a, Matriz *b, int row, int col){
+Matriz SomaMatriz(Matriz *a, Matriz *b, int row, int col){
     int i, j, soma;
     Celula *cA, *cB;
     Matriz c;
     CriaMatriz(&c, row, col);
     cA = a->cabeca->baixo;
     cB = b->cabeca->baixo;
+    for (i = 1; i <= row; i++){
+        for(j = 1; j <= col; j++){
+            if(cA->prox->col_pos == j && cB->prox->col_pos == j){
+                soma = cA->prox->item.numero + cB->prox->item.numero;
+                if (soma)
+                    InsereCelula(&c, i, j, soma);
+                cA = cA->prox;
+                cB = cB->prox;
+            }
+            else if(cA->prox->col_pos == j){
+                InsereCelula(&c, i, j, cA->prox->item.numero);
+                cA = cA->prox;
+            }
+            else if(cB->prox->col_pos == j){
+                InsereCelula(&c, i, j, cB->prox->item.numero);
+                cB = cB->prox;
+            }
+        }
+        cA = cA->prox->baixo;
+        cB = cB->prox->baixo;
+    }
+    return c;
 }

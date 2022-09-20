@@ -22,7 +22,7 @@ void CriaMatriz(Matriz*, int, int);
 
 void ImprimeMatrizEsparsa(Matriz*, int, int);
 
-void LiberaMemoria(Matriz*);
+void LiberaMemoria(Matriz*, int, int);
 
 void MatrizTransposta(Matriz*, int, int);
 
@@ -30,7 +30,7 @@ void InsereCelula(Matriz*, int, int, int);
 
 void LeValores(Matriz *m);
 
-Matriz *SomaMatriz(Matriz*, Matriz *, int, int);
+Matriz SomaMatriz(Matriz*, Matriz *, int, int);
 
 
 #endif // lista_h

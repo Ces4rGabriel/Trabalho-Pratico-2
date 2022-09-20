@@ -4,14 +4,31 @@
 
 
 int main(){
-    int row, col;
-    Matriz m;
-    scanf("%d %d", &row, &col);
-    CriaMatriz(&m, row, col);
-    LeValores(&m);
-    ImprimeMatrizEsparsa(&m, row, col);
-    printf("\n");
-    MatrizTransposta(&m, row, col);
-    LiberaMemoria(&m);
+    int row, col, n;
+    char op;
+    Matriz a, b, c;
+    scanf("%d %c", &n, &op);
+    switch (op)
+    {
+    case 'T':
+        scanf("%d %d", &row, &col);
+        CriaMatriz(&a, row, col);
+        LeValores(&a);
+        MatrizTransposta(&a, row, col);
+        LiberaMemoria(&a, row, col);
+        break;
+    case 'S':
+        // soma n matrizes
+        while (n > 0){
+            
+            n--;
+        }
+        
+
+        break;
+    case 'M':
+        break;
+    }
+    //MatrizTransposta(a, row, col);
     return 0;
 }
