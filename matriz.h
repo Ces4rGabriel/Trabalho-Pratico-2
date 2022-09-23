@@ -16,21 +16,26 @@ typedef struct celula{
 typedef struct {
     Celula *cabeca;
     Celula *cauda;
+    int m_row, m_col;
 } Matriz;
 
-void CriaMatriz(Matriz*, int, int);
+void CriaMatriz(Matriz*);
 
-void ImprimeMatrizEsparsa(Matriz*, int, int);
+void ImprimeMatrizEsparsa(Matriz*);
 
-void LiberaMemoria(Matriz*, int, int);
+void LiberaMemoria(Matriz*);
 
-void MatrizTransposta(Matriz*, int, int);
+void MatrizTransposta(Matriz*);
 
 void InsereCelula(Matriz*, int, int, int);
 
-void LeValores(Matriz *m);
+void LeValores(Matriz *);
 
-Matriz SomaMatriz(Matriz*, Matriz *, int, int);
+Matriz SomaMatriz(Matriz*, Matriz *);
+
+Matriz MultiplicaMatriz(Matriz*, Matriz *);
+
+int PegaElemento(Matriz *, int, int);
 
 
 #endif // lista_h

@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 
-void CriaMatriz(Matriz *m, int row, int col){
+void CriaMatriz(Matriz *m){
     //Cria uma cabeça e faz a cauda apontar para ela
     m->cabeca = (Celula *)malloc(sizeof(Celula));
     m->cauda = m->cabeca;
@@ -15,7 +15,7 @@ void CriaMatriz(Matriz *m, int row, int col){
     //printf("\nDigite o numero de linhas e colunas da matriz: ");
     
     // cria as celulas da coluna
-    for (int i = 0; i < col; i++) {
+    for (int i = 0; i < m->m_col; i++) {
         m->cauda->prox = (Celula *)calloc(1, sizeof(Celula));
         m->cauda = m->cauda->prox;
         m->cauda->prox = m->cabeca;
@@ -25,7 +25,7 @@ void CriaMatriz(Matriz *m, int row, int col){
     
     // cria as celulas da linha
     m->cauda = m->cabeca;
-    for (int i = 0; i < row; i++) {
+    for (int i = 0; i < m->m_row; i++) {
         m->cauda->baixo = (Celula *)calloc(1, sizeof(Celula));
         m->cauda = m->cauda->baixo;
         m->cauda->baixo = m->cabeca;
@@ -82,13 +82,13 @@ void InsereCelula(Matriz* m, int row, int col, int valor){
         // FIM INSERIR CELULA
 }
 
-void LiberaMemoria(Matriz *m, int row, int col){
+void LiberaMemoria(Matriz *m){
     int i, j;
     Celula *aux = m->cabeca->baixo;
     Celula *aux2 = aux->prox;
     //percorrer a matriz esparsa e liberar a memoria
-    for(i = 1; i <= row; i++){
-        for(j = 1; j <= col; j++){
+    for(i = 1; i <= m->m_row; i++){
+        for(j = 1; j <= m->m_col; j++){
             if(aux->prox->row_pos == i && aux->prox->col_pos == j){
                 aux2 = aux->prox;
                 aux->prox = aux->prox->prox;
@@ -98,13 +98,13 @@ void LiberaMemoria(Matriz *m, int row, int col){
         aux = aux->baixo;
     }
     aux = m->cabeca->prox;
-    for(i = 1; i <= col; i++){
+    for(i = 1; i <= m->m_col; i++){
         aux2 = aux;
         aux = aux->prox;
         free(aux2);
     }
     aux = m->cabeca->baixo;
-    for(i = 1; i <= row; i++){
+    for(i = 1; i <= m->m_row; i++){
         aux2 = aux;
         aux = aux->baixo;
         free(aux2);
@@ -112,12 +112,12 @@ void LiberaMemoria(Matriz *m, int row, int col){
     free(m->cabeca);
 }
 
-void ImprimeMatrizEsparsa(Matriz *m, int row, int col){
+void ImprimeMatrizEsparsa(Matriz *m){
     int i, j;
     Celula *aux = m->cabeca->baixo;
     Celula *aux2 = aux->prox;
-    for(i = 1; i <= row; i++){
-        for(j = 1; j <= col; j++){
+    for(i = 1; i <= m->m_row; i++){
+        for(j = 1; j <= m->m_col; j++){
             if(aux2->row_pos == i && aux2->col_pos == j){
                 printf("%d ", aux2->item.numero);
                 aux2 = aux2->prox;
@@ -131,15 +131,17 @@ void ImprimeMatrizEsparsa(Matriz *m, int row, int col){
     }
 }
 
-void MatrizTransposta(Matriz *m, int row, int col){
+void MatrizTransposta(Matriz *m){
     int i, j;
     Matriz t;
-    CriaMatriz(&t, col, row);
+    t.m_col = m->m_row;
+    t.m_row = m->m_col;
+    CriaMatriz(&t);
     // passar valores da matriz m para matriz tranposta
     Celula *aux = m->cabeca->prox;
     Celula *aux2 = aux->baixo;
-    for(i = 1; i <= col; i++){
-        for(j = 1; j <= row; j++){
+    for(i = 1; i <= m->m_col; i++){
+        for(j = 1; j <= m->m_row; j++){
             if(aux2->row_pos == j && aux2->col_pos == i){
                 InsereCelula(&t, i, j, aux2->item.numero);
                 aux2 = aux2->baixo;
@@ -148,19 +150,21 @@ void MatrizTransposta(Matriz *m, int row, int col){
         aux = aux->prox;
         aux2 = aux->baixo;
     }
-    ImprimeMatrizEsparsa(&t, col, row);
-    LiberaMemoria(&t, row, col);
+    ImprimeMatrizEsparsa(&t);
+    LiberaMemoria(&t);
 }
 
-Matriz SomaMatriz(Matriz *a, Matriz *b, int row, int col){
+Matriz SomaMatriz(Matriz *a, Matriz *b){
     int i, j, soma;
     Celula *cA, *cB;
     Matriz c;
-    CriaMatriz(&c, row, col);
+    c.m_col = a->m_col;
+    c.m_row = a->m_row;
+    CriaMatriz(&c);
     cA = a->cabeca->baixo;
     cB = b->cabeca->baixo;
-    for (i = 1; i <= row; i++){
-        for(j = 1; j <= col; j++){
+    for (i = 1; i <= a->m_row; i++){
+        for(j = 1; j <= a->m_col; j++){
             if(cA->prox->col_pos == j && cB->prox->col_pos == j){
                 soma = cA->prox->item.numero + cB->prox->item.numero;
                 if (soma)
@@ -181,4 +185,43 @@ Matriz SomaMatriz(Matriz *a, Matriz *b, int row, int col){
         cB = cB->prox->baixo;
     }
     return c;
+}
+
+Matriz MultiplicaMatriz(Matriz *a, Matriz *b){
+    int i, j, k, soma;
+    //cria c e atribui os valores de linha e coluna
+    Matriz c;
+    c.m_row = a->m_row;
+    c.m_col = b->m_col;
+    CriaMatriz(&c);
+    //multiplicação
+    for(i = 1; i <= a->m_row; i++){
+        for(j = 1; j <= b->m_col; j++){
+            soma = 0;
+            for(k = 1; k <= a->m_col; k++){
+                soma += PegaElemento(a, i, k) * PegaElemento(b, k, j);
+            }
+            if(soma)
+                InsereCelula(&c, i, j, soma);
+        }
+    }
+    return c;
+}
+
+int PegaElemento(Matriz *m, int row, int col){
+    Celula *aux = m->cabeca->baixo;
+    Celula *aux2 = aux->prox;
+    for(int i = 1; i <= m->m_row; i++){
+        for(int j = 1; j <= m->m_col; j++){
+            if(aux2->row_pos == i && aux2->col_pos == j){
+                if(i == row && j == col){
+                    return aux2->item.numero;
+                }
+                aux2 = aux2->prox;
+            }
+        }
+        aux = aux->baixo;
+        aux2 = aux->prox;
+    }
+    return 0;
 }
