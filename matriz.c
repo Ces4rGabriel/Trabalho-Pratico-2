@@ -201,27 +201,24 @@ Matriz MultiplicaMatriz(Matriz *a, Matriz *b){
             for(k = 1; k <= a->m_col; k++){
                 soma += PegaElemento(a, i, k) * PegaElemento(b, k, j);
             }
-            if(soma)
+            if(soma != 0)
                 InsereCelula(&c, i, j, soma);
         }
     }
     return c;
 }
 
+
 int PegaElemento(Matriz *m, int row, int col){
-    Celula *aux = m->cabeca->baixo;
-    Celula *aux2 = aux->prox;
-    for(int i = 1; i <= m->m_row; i++){
-        for(int j = 1; j <= m->m_col; j++){
-            if(aux2->row_pos == i && aux2->col_pos == j){
-                if(i == row && j == col){
-                    return aux2->item.numero;
-                }
-                aux2 = aux2->prox;
-            }
-        }
+    Celula *aux = m->cabeca->prox;
+    for (int i = 0; i < col -1; i++)
+        aux = aux->prox;
+    Celula *aux2 = aux;
+    do{
         aux = aux->baixo;
-        aux2 = aux->prox;
-    }
+        if (aux->row_pos == row)
+            return aux->item.numero;
+    }while (aux != aux2);
+
     return 0;
 }

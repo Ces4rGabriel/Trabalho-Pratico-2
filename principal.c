@@ -43,7 +43,6 @@ int main(){
         CriaMatriz(&a);
         LeValores(&a);
         while (n > 1){
-
             scanf("%d %d", &b.m_row, &b.m_col);
             CriaMatriz(&b);
             LeValores(&b);
